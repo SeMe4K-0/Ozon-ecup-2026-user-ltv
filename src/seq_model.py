@@ -28,7 +28,7 @@ import polars as pl
 import torch
 import torch.nn as nn
 
-from config import (PRED_DIR, ARTIFACTS, HORIZON, MODELS_DIR, PREDICT_ANCHOR, SEED, SEQ_CHANNELS,
+from config import (PRED_DIR, VALID_LEVEL, ARTIFACTS, HORIZON, MODELS_DIR, PREDICT_ANCHOR, SEED, SEQ_CHANNELS,
                     SEQ_LEN, SEQ_SCALE, VALID_ANCHOR, DROP, final_anchors, train_anchors)
 from features import anchor_path
 from seq_data import seq_path
@@ -44,7 +44,6 @@ def norm_file(tag: str):
     """
     return MODELS_DIR / f"norm_{tag}.npz"
 
-VALID_LEVEL = 2.2421          # истинный уровень январского окна (по умолчанию)
 
 
 def window_level(y_true):

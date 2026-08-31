@@ -27,12 +27,11 @@ import torch
 import torch.nn as nn
 
 import panel
-from config import (PRED_DIR, ARTIFACTS, HORIZON, MIN_HISTORY_DAYS, MODELS_DIR, PREDICT_ANCHOR,
+from config import (PRED_DIR, VALID_LEVEL, ARTIFACTS, HORIZON, MIN_HISTORY_DAYS, MODELS_DIR, PREDICT_ANCHOR,
                     SEED, SEQ_CHANNELS, SEQ_SCALE, VALID_ANCHOR)
 
 from seq_model import SeqNet, build_bins, dist_labels, rmsle_from_log
 
-VALID_LEVEL = 2.2421
 
 
 def anchors_for(mode: str, seq_len: int, stride: int,

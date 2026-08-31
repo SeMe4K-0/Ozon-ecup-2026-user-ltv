@@ -44,6 +44,11 @@ MIN_HISTORY_DAYS = 180        # минимум истории под самое 
 
 N_USERS = 250_000
 
+# Истинный уровень январского окна: среднее log1p(таргета) по всем пользователям.
+# Раньше это число было продублировано в blend.py, seq_model.py и panel_model.py
+# под тремя разными именами — при любой правке одно из мест отставало.
+VALID_LEVEL = 2.2421
+
 # --- признаки ------------------------------------------------------------
 # Версия входит в имя файла кэша: разные версии признаков не перетирают друг
 # друга, что позволяет сравнивать эксперименты без пересборки.
@@ -139,3 +144,29 @@ def train_anchors(last: date = TRAIN_ANCHOR_LAST,
         out.append(a)
         a -= timedelta(days=stride)
     return sorted(out)
+
+
+def build_submission(user_ids, log_pred, name: str):
+    """Собрать сабмит из предсказаний в log1p-шкале и проверить его.
+
+    Логика была продублирована в blend.py и rebuild_final.py: порядок строк
+    берётся из образца организаторов, пропуски заполняются нулями. Расхождение
+    между копиями заметить трудно, а цена ошибки — недействительный сабмит.
+    """
+    import numpy as np
+    import polars as pl
+
+    log_pred = np.clip(log_pred, 0, None)
+    sub = pl.DataFrame({"user_id": user_ids, "predict": np.expm1(log_pred)})
+    order = pl.read_csv(SAMPLE_SUBMIT).select("user_id")
+    sub = order.join(sub, on="user_id", how="left").with_columns(
+        pl.col("predict").fill_null(0.0))
+
+    assert sub.height == N_USERS, f"строк {sub.height}, ожидалось {N_USERS}"
+    assert sub["user_id"].to_list() == order["user_id"].to_list(), "порядок пользователей нарушен"
+    assert bool(sub["predict"].is_finite().all()), "есть бесконечные значения"
+    assert sub["predict"].min() >= 0, "есть отрицательные предсказания"
+
+    out = SUBMISSIONS_DIR / f"{name}.csv"
+    sub.write_csv(out)
+    return out, sub

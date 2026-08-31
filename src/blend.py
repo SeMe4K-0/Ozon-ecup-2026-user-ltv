@@ -23,14 +23,14 @@ import numpy as np
 import polars as pl
 from scipy.optimize import nnls
 
-from config import MODELS_DIR, PREDICT_ANCHOR, SAMPLE_SUBMIT, SUBMISSIONS_DIR, VALID_ANCHOR
+from config import MODELS_DIR, VALID_LEVEL, PREDICT_ANCHOR, VALID_ANCHOR, build_submission
 from config import PRED_DIR
 from features import anchor_path
 from train import rmsle_from_log
 
 # Уровень последнего полностью наблюдаемого 30-дневного окна: среднее log1p
 # таргета. Свойство данных, от состава бленда не зависит (см. METHOD.md).
-DEFAULT_LEVEL = 2.2421
+DEFAULT_LEVEL = VALID_LEVEL
 
 
 def load(mode: str, names: list[str]) -> np.ndarray:
@@ -117,17 +117,8 @@ def main() -> None:
     else:
         c = args.scale * c
     pred_log = np.clip(c + args.level, 0, None)
-    pred = np.expm1(pred_log)
     user_ids = pl.read_parquet(anchor_path(PREDICT_ANCHOR), columns=["user_id"])["user_id"].to_numpy()
-
-    sub = pl.DataFrame({"user_id": user_ids, "predict": pred})
-    order = pl.read_csv(SAMPLE_SUBMIT).select("user_id")
-    sub = order.join(sub, on="user_id", how="left").with_columns(pl.col("predict").fill_null(0.0))
-    assert sub.height == order.height and sub["predict"].null_count() == 0
-    assert sub["predict"].is_finite().all() and sub["predict"].min() >= 0
-
-    out = SUBMISSIONS_DIR / f"{args.name}.csv"
-    sub.write_csv(out)
+    out, sub = build_submission(user_ids, pred_log, args.name)
     print(f"\nсабмит -> {out}")
     print(f"  mean log1p(pred) = {pred_log.mean():.4f}")
     print(f"  нулей {int((sub['predict'] == 0).sum())}, медиана {sub['predict'].median():.2f}, "

@@ -27,7 +27,7 @@ from __future__ import annotations
 import numpy as np
 import polars as pl
 
-from config import PRED_DIR, SAMPLE_SUBMIT, SUBMISSIONS_DIR
+from config import PRED_DIR, SUBMISSIONS_DIR, build_submission
 
 LEVEL = 2.32957         # свободный член итогового решения
 
@@ -63,14 +63,6 @@ def centered(tag: str, mode: str = "final") -> np.ndarray:
     return a - a.mean()
 
 
-def validate(sub: pl.DataFrame) -> None:
-    order = pl.read_csv(SAMPLE_SUBMIT).select("user_id")
-    assert sub.height == 250_000, f"строк {sub.height}, ожидалось 250000"
-    assert sub["user_id"].to_list() == order["user_id"].to_list(), "порядок пользователей не совпадает"
-    assert bool(sub["predict"].is_finite().all()), "есть бесконечные значения"
-    assert sub["predict"].min() >= 0, "есть отрицательные предсказания"
-
-
 def main() -> None:
     c = sum(w * centered(tag) for tag, w in WEIGHTS.items())
     log_pred = np.clip(LEVEL + c, 0, None)
@@ -79,14 +71,7 @@ def main() -> None:
     # пересобираемы и удалены при уборке, а пересборка решения должна работать
     # на том, что хранится постоянно
     uid = np.load(PRED_DIR / "final_user_ids.npy")
-    sub = pl.DataFrame({"user_id": uid, "predict": np.expm1(log_pred)})
-    sub = (pl.read_csv(SAMPLE_SUBMIT).select("user_id")
-             .join(sub, on="user_id", how="left")
-             .with_columns(pl.col("predict").fill_null(0.0)))
-    validate(sub)
-
-    out = SUBMISSIONS_DIR / "final_rebuilt.csv"
-    sub.write_csv(out)
+    out, sub = build_submission(uid, log_pred, "final_rebuilt")
     print(f"собрано -> {out}")
     print(f"  среднее log1p {log_pred.mean():.5f}, ст.откл {log_pred.std():.4f}")
 
