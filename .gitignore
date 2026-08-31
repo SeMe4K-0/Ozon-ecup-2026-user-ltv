@@ -16,3 +16,12 @@ __pycache__/
 *.pyc
 catboost_info/
 .ipynb_checkpoints/
+
+# Базовый ноутбук организаторов — не часть нашего решения.
+# sample_submit.csv НЕ исключаем: по нему код выстраивает порядок пользователей
+# в сабмите, без него rebuild_final.py и blend.py не работают.
+baseline-seacrh-ltv.ipynb
+
+# Черновики расчётов
+artifacts/**/_*.npy
+artifacts/**/_*.json
