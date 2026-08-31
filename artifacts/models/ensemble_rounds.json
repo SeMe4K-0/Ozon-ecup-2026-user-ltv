@@ -1,0 +1,17 @@
+{
+  "lgbm": {
+    "rounds": 339
+  },
+  "lgbm_deep": {
+    "rounds": 194
+  },
+  "two_stage": {
+    "rounds": {
+      "cls": 221,
+      "reg": 198
+    }
+  },
+  "lgbm_slow": {
+    "rounds": 615
+  }
+}

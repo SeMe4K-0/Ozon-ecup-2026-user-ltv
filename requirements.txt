@@ -1,0 +1,10 @@
+# Табличная часть: признаки, бустинги, бленд, сборка сабмита.
+# Проверено на Python 3.14.
+polars>=1.43
+pandas>=2.2
+numpy>=2.0
+pyarrow>=17
+scikit-learn>=1.5
+scipy>=1.14
+lightgbm>=4.6
+catboost>=1.2

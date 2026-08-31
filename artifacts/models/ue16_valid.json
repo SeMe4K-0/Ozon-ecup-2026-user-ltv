@@ -1,0 +1,24 @@
+{
+  "hist": [
+    {
+      "seed": 0,
+      "best": 1.7582979917679218,
+      "best_epoch": 1
+    },
+    {
+      "seed": 1,
+      "best": 1.7623911491854038,
+      "best_epoch": 1
+    },
+    {
+      "seed": 2,
+      "best": 1.7630601456173043,
+      "best_epoch": 1
+    }
+  ],
+  "epochs": 12,
+  "batch": 1024,
+  "lr": 0.0015,
+  "hidden": 128,
+  "n_anchors": 22
+}

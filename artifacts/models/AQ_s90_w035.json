@@ -1,0 +1,21 @@
+{
+  "models": [
+    "ts_clean",
+    "seqnet_big",
+    "dist32",
+    "hist_dist",
+    "panel180",
+    "seqnet_90"
+  ],
+  "weights": [
+    0.13,
+    0.13,
+    0.13,
+    0.13,
+    0.13,
+    0.35
+  ],
+  "level": 2.3292,
+  "valid_rmsle": 1.6651934765040253,
+  "mean_log_pred": 2.3294236053169297
+}

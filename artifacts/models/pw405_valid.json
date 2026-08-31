@@ -1,0 +1,23 @@
+{
+  "hist": [
+    {
+      "seed": 0,
+      "best": 1.6755998134613037,
+      "best_epoch": 6
+    },
+    {
+      "seed": 1,
+      "best": 1.676688551902771,
+      "best_epoch": 6
+    },
+    {
+      "seed": 2,
+      "best": 1.6745061874389648,
+      "best_epoch": 6
+    }
+  ],
+  "seq_len": 180,
+  "stride": 1,
+  "steps": 4000,
+  "hidden": 192
+}

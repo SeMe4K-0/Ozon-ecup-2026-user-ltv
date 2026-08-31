@@ -1,0 +1,11 @@
+{
+  "loss": [
+    2.82828950881958
+  ],
+  "seq_len": 180,
+  "hidden": 192,
+  "arch": "gru",
+  "mask_frac": 0.15,
+  "epochs": 1,
+  "steps": 4
+}

@@ -1,0 +1,11 @@
+# Нейросети (seq_model.py, panel_model.py) — ОТДЕЛЬНОЕ окружение Python 3.11:
+# CUDA-сборка torch собрана под него, на 3.14 её нет.
+#
+#   py -3.11 -m pip install torch --index-url https://download.pytorch.org/whl/cu121
+#   py -3.11 -m pip install -r requirements-torch.txt
+#
+# Проверено на torch 2.5.1+cu121, RTX 3060 (compute capability 8.6).
+torch>=2.5
+polars>=1.43
+numpy>=2.0
+pyarrow>=17

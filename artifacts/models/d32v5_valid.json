@@ -1,0 +1,39 @@
+{
+  "hist": [
+    {
+      "seed": 3,
+      "best": 1.6699693489693184,
+      "best_epoch": 1
+    },
+    {
+      "seed": 4,
+      "best": 1.6693743021805043,
+      "best_epoch": 4
+    },
+    {
+      "seed": 5,
+      "best": 1.669727990276742,
+      "best_epoch": 6
+    },
+    {
+      "seed": 6,
+      "best": 1.6690096159047019,
+      "best_epoch": 5
+    },
+    {
+      "seed": 7,
+      "best": 1.6698134438987984,
+      "best_epoch": 2
+    },
+    {
+      "seed": 8,
+      "best": 1.6685696590154058,
+      "best_epoch": 7
+    }
+  ],
+  "epochs": 12,
+  "batch": 1024,
+  "lr": 0.0015,
+  "hidden": 128,
+  "n_anchors": 22
+}
